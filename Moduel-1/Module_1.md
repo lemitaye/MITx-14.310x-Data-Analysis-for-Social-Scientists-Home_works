@@ -127,7 +127,7 @@ age[c(1, 2, 3, 4, 6, 7, 8, 9, 10, 12)]  # subsets based on the given index value
     ##  [1] 12 28 35 27 25 32 45 31 23 34
 
 ``` r
-age[!is.na(age)]  # uses logical subsetting (most efficient) to extract non-missing values
+age[!is.na(age)]  # uses logical subsetting to extract non-missing values (most efficient)
 ```
 
     ##  [1] 12 28 35 27 25 32 45 31 23 34
