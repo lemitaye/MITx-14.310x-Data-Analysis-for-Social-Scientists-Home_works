@@ -111,5 +111,112 @@ age[!is.na(age)]  # uses logical subsetting to extract non-missing values (most 
 ```
 
 
+## Question 17
+
+Download the data "CitesforSara.csv" into RStudio. This dataset includes paper-level citations from 1969 to 1998. First, read the CSV file into R using these commands:
+
+```
+library(tidyverse)
+papers <- as_tibble(read_csv("[YOURFILEPATH]/CitesforSara.csv"))
+```
+
+Great! Let’s create a simplified dataset which only keeps the following variables contained in the papers dataset in this order: journal, year, cites, title, and au1. Use the method `select()` to accomplish this. Set this output to the variable `papers_select.` Drag and drop to create the code. Note that there may be more than one way to do this but there is only one correct answer from the following drag-and-drop options.
+
+
+### Answer
+
+Based on the drag and drop template:
+
+```{r include=FALSE}
+library(tidyverse)
+papers <- read_csv("CitesforSara.csv")
+```
+
+```{r Q_17}
+papers_select <- select(papers, journal, year, cites, title, au1)
+
+# Let's see our data set:
+papers_select
+```
+
+
+## Quesion 18
+
+Let’s take a look at some of the most popular papers. Using the `filter()` method, how many records exist where there are greater than or equal to 100 citations?
+
+### Answer
+
+```{r Q_18}
+papers_select %>%
+  filter(cites >= 100)
+```
+
+As observed in the header, there are 205 records with at least 100 citations.
+
+
+## Question 19
+
+Use the `group_by()` function to group papers by journal. How many total citations exist for the journal “Econometrica”?
+
+### Answer
+
+```{r Q_19}
+papers_select %>%
+  group_by(journal) %>%
+  summarise(tot_cites = sum(cites, na.rm = TRUE))
+```
+
+The journal Econometrica has 75789 total citations.
+
+
+## Question 20
+
+How many distinct primary authors (*au1*) exist in this dataset? Note: do not remove `NA` values.
+
+### Answer
+
+```{r Q_20}
+papers_select %>%
+  summarise(n_distinct(au1))
+```
+
+There are 2332 distinct primary authors.
+
+
+## Question 21
+
+Use the *dpylr* `contains()` method to create a new dataset called `papers_female` which contains only the columns from papers containing the string “female”. Drag and drop to create the code. Note that there may be more than one way to do this but there is only one correct answer from the following drag-and-drop options.
+
+### Answer
+
+Based on the drag-and-drop template:
+
+```{r Q_21}
+paper_female <- select(papers, contains("female"))
+
+paper_female
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
