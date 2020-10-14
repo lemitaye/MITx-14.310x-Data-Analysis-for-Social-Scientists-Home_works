@@ -4,7 +4,7 @@ author: "Lemi Daba"
 date: "10/14/2020"
 output: 
   github_document:    
-    pandoc_args: --webtex=https://latex.codecogs.com/svg.latex?
+    pandoc_args: --webtex
 ---
 
 ```{r setup, include=FALSE}
@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Preamble
 
-For Questions 9 - 15, let $$ X \sim B(n, p) $$ with $ n = 8 $ and $ p = 0.2 $.
+For Questions 9 - 15, let $X \sim B(n, p)$ with $n = 8$ and $p = 0.2$.
 
 For this section, please use this file for help with the R code. We highly encourage you to look up the documentation on your own time.
 
