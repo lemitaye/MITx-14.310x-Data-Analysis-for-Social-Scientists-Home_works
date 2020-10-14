@@ -166,7 +166,7 @@ Instead of plotting the observed density, we could’ve plotted the
 analytical densities derived from the formula above. Below is the code
 to do this. Select from the drop-down options the correct code.
 
-Please note n = 1000 and p =0.2
+Please note n = 1000 and p = 0.2
 
     # Create a tibble with x and the analytical probability densities.
     my_binom <- as_tibble(list(x=0:n, prob = dbinom(0:n, n, p)))
