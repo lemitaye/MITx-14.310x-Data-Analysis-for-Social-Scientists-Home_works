@@ -107,7 +107,7 @@ We found the code below, to plot the densities from the “successes” vector y
 
 Let's first load the tidyverse package.
 
-```{r results='hide'}
+```{r message=FALSE}
 library(tidyverse)
 ```
 
