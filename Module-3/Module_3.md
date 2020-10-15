@@ -175,7 +175,8 @@ gender_data %>%
     ## # A tibble: 0 x 3
     ## # ... with 3 variables: Country.Code <chr>, Indicator.Code <chr>, n <int>
 
-So the variables `Country.Code` and `Indicator.Code` do indeed uniquely
+There are 0 groups with more than 1 observation in them. So the
+variables `Country.Code` and `Indicator.Code` do indeed uniquely
 identify each observation.
 
 Question 3
