@@ -76,7 +76,7 @@ A. What is the probability of getting exactly 7 heads on 10 flips?
 **Answer:**
 
 ``` r
-round( dbinom(x = 7, size = 10, prob = 0.65), 2) 
+round(dbinom(x = 7, size = 10, prob = 0.65), 2)
 ```
 
     ## [1] 0.25
@@ -86,7 +86,7 @@ B. What is the probability of getting at most 7 heads on 10 flips?
 **Answer:**
 
 ``` r
-round( pbinom(q = 7, size = 10, prob = 0.65), 2) 
+round(pbinom(q = 7, size = 10, prob = 0.65), 2)
 ```
 
     ## [1] 0.74
@@ -96,7 +96,7 @@ C.What is the probability of getting at least 6 heads on 10 flips?
 **Answer:**
 
 ``` r
-round( pbinom(q = 5, size = 10, prob = 0.65, lower.tail = FALSE), 2) 
+round(pbinom(q = 5, size = 10, prob = 0.65, lower.tail = FALSE), 2)
 ```
 
     ## [1] 0.75
@@ -104,7 +104,7 @@ round( pbinom(q = 5, size = 10, prob = 0.65, lower.tail = FALSE), 2)
 or
 
 ``` r
-round( 1 - pbinom(q = 5, size = 10, prob = 0.65), 2)
+round(1 - pbinom(q = 5, size = 10, prob = 0.65), 2)
 ```
 
     ## [1] 0.75
@@ -132,18 +132,18 @@ library(tidyverse)
 ``` r
 binom_draws <- as_tibble(data.frame(successes))
 
-estimated_pf <- binom_draws %>% 
-    group_by(successes) %>% 
-    summarise(n = n()) %>% 
-    mutate(freq = n/sum(n))
+estimated_pf <- binom_draws %>%
+  group_by(successes) %>%
+  summarise(n = n()) %>%
+  mutate(freq = n / sum(n))
 ```
 
     ## `summarise()` ungrouping output (override with `.groups` argument)
 
 ``` r
 ggplot(estimated_pf, aes(x = successes, y = freq)) +
-    geom_col() +
-    ylab("Estimated Density")
+  geom_col() +
+  ylab("Estimated Density")
 ```
 
 ![](Module_2_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
@@ -177,10 +177,11 @@ p <- 0.2
 Now, we just run the above code.
 
 ``` r
-my_binom <- as_tibble(list(x=0:n, prob = dbinom(0:n, n, p)))
+my_binom <- as_tibble(list(x = 0:n, prob = dbinom(0:n, n, p)))
 
-ggplot(my_binom, aes(x=x, y=prob)) + geom_col() +
-     ylab("Analytical Density")
+ggplot(my_binom, aes(x = x, y = prob)) +
+  geom_col() +
+  ylab("Analytical Density")
 ```
 
 ![](Module_2_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
@@ -195,13 +196,13 @@ code.
 ### Answer
 
 ``` r
-calculated_cdf <- my_binom %>% 
-    mutate(cdf = cumsum(prob)) 
+calculated_cdf <- my_binom %>%
+  mutate(cdf = cumsum(prob))
 
 # Plot the computed cdf
 ggplot(calculated_cdf, aes(x = x, y = cdf)) +
-    geom_step() +
-    ylab("CDF")
+  geom_step() +
+  ylab("CDF")
 ```
 
 ![](Module_2_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
