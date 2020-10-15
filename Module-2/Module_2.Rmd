@@ -82,7 +82,7 @@ B. What is the probability of getting at most 7 heads on 10 flips?
 round(pbinom(q = 7, size = 10, prob = 0.65), 2)
 ```
 
-C.What is the probability of getting at least 6 heads on 10 flips?
+C. What is the probability of getting at least 6 heads on 10 flips?
 
 **Answer:**
 
