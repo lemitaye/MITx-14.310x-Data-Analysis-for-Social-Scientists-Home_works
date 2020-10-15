@@ -13,8 +13,126 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Preamble
 
-For Questions 9 - 15, let $X \sim B(n, p)$ with $n = 8$ and $p = 0.2$.
+In this problem set we will guide you through different ways of accessing real data sets and how to summarize and describe it properly. First we will go through some of the data that is collected by the World Bank. We will do some cleaning on the data before we start analyzing it. Then, we will try to do a simple web scraping exercise where we will analyze the data as well.
 
-For this section, please use this file for help with the R code. We highly encourage you to look up the documentation on your own time.
 
-Look at the `rbinom()` documentation to sample draws from this binomial distribution. Use it to generate a vector called "successes" with 1000 draws from this distribution.
+Let’s start with this dataset from the World Bank.  Please download and save this file in a folder where you can get it easily.
+
+This dataset is a truncated version of one you can find on the [World Bank Gender Statistics website](https://datacatalog.worldbank.org/dataset/gender-statistics). You may visit the website and explore other datasets they offer. **However, for the purposes of this assignment, please use the file in this set of instructions**, since the dataset on the World Bank website may have been updated in the time since this problem set and answer key was posted.
+
+**NOTE**:  It is important to work in the same directory that the files are or to use the whole path when you specify opening a data set. To know which directory you are currently working in, you can use the command `getwd()`. Similarly, in order to set a different directory, you can use the command `setwd()`.
+
+For the purpose of analyzing the data, we are going to use the packages **utils** and **tidyverse**. Once you have uploaded the data to R you are going to see there are multiple indicators of gender, countries and years in the data. In this case we are just interested in analyzing the data for one indicator that is the *Adolescent Fertility Rate*, in the data the indicator code for this variable is called SP.ADO.TFRT . This indicator measures the annual number of births to women 15 to 19 years of age per 1,000 women in that age group. It represents the risk of childbearing among adolescent women 15 to 19 years of age. It is also referred to as the age-specific fertility rate for women aged 15-19. Once you have completed this problem set you’ll have more information of how this rate has evolved over time and how it varies across different groups of countries.
+
+Take a look at the following lines of code, whose main purpose is to upload the data in a data frame and to choose the proper indicator. Please, try to understand the code and then run it in your computer. Remember to set the directory accordingly to the folder where you saved the files.
+
+```
+#Preliminaries
+rm(list=ls())
+library("utils")
+library("tidyverse")
+
+setwd("-----------")
+
+#Getting the data
+gender_data <- as_tibble(read.csv("Gender_StatsData.csv"))
+```
+
+**Using the code, answer the following questions:**
+
+## Question 1
+
+What is the purpose of the line `rm(list = ls())`?
+
+### Answer
+
+This command removes all current objects in the Global Environment. It is usually useful when we want to start a new analysis with a clean slate. 
+
+
+## Question 2
+
+The first thing you want to figure out when you look at a new dataset is how it is organized. If your dataset is stored as a tibble, you can simply print the object and it will print in a nice-looking format.
+
+Alternatively, you can also use the built-in R commands such as `str()`, which allows you to see the structure of an object in R. Likewise, the commands `head()` and `tail()` will allow you to see the first six and last six observations of your data frame respectively. Another useful function is the function `dim()`, which will give you the number of rows and columns in your dataset. Take the time to explore the data using these commands and others.
+
+Which of the following statements best describes how your data is organized? Note that we use "indicator" to mean something that is being measured (e.g. fertility rate, enrollment rate, etc.).
+
+
+### Answer
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(utils)
+
+gender_data <- read_csv("Gender_StatsData.csv")
+```
+
+With tibbles we can view the first few observations without using `head()`:
+```{r}
+gender_data
+```
+
+(We can get a more exteded view with `View(gender_data)` in RStudio.) Here, let's use knitr's `kable` command to get a nice formatted tabular view of the first 15 observations in our data.
+
+```{r}
+knitr::kable(gender_data[1:15, ])
+```
+
+It seems each observation corresponds to a country-indicator combination. To confirm our suspicion, let's count the observations in each country-indicator combination and see if any of them contain more than one observation:
+
+```{r}
+gender_data %>%
+  count(Country.Code, Indicator.Code) %>%
+  filter(n > 1)
+```
+
+So the variables `Country.Code` and `Indicator.Code` do indeed uniquely identify each observation. 
+
+
+## Question 3
+
+Now, generate a tibble called "`teenager_fr`”, which contains only the adolescent fertility rate indicator for each country-year. Please fill in the blank with the correct code.
+
+### Answer
+
+```{r}
+teenager_fr <- filter(
+  gender_data,
+  Indicator.Code == "SP.ADO.TFRT"
+)
+
+teenager_fr
+```
+
+
+## Question 3 (continued)
+
+What is the equivalent base-R function ? (select one)
+
+(Choices are not shown here.)
+
+
+### Answer
+
+Out of the three alternatives presented, `subset()` is the equivalent base-R function to dplyr's `filter()`. The following code gives the same result as using `filter()` above. 
+
+```{r}
+subset(gender_data, Indicator.Code == "SP.ADO.TFRT")
+```
+
+
+`which()` returns the position of the elements (i.e., row number/column number/array index) in a logical vector which are TRUE, whereas `match()` returns the position of first occurrence of its first argument in its second.
+
+
+## Question 4
+
+Since we are not interested in any other variables and the gender_data dataset is quite large, you might want to get rid of it instead of asking R to keep it stored in memory.
+
+Which of the following is the correct code for getting rid of the object `gender_data`?
+
+(Choices are not displayed here.)
+
+
+### Answer
+
+Use `rm()` to remove objects from the global environment. So `rm(gender_data)` achieves the desired result.
