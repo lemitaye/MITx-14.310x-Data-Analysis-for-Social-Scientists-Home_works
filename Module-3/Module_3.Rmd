@@ -274,6 +274,156 @@ byincomelevel %>%
 ```
 
 
+## Question 11
+
+Suppose you take a look at the data and change your mind. You decided you prefer to look at the data at the year level and have the fertility rates for each income-group as separate variables. The tidyr command `spread()` can help you achieve this. Look up the command in the help files. Select the set of arguments that belong in the blanks below:
+
+(The incomplete code is not shown here.)
+
+### Answer
+
+```{r}
+plotdata_byyear <- select(plotdata_bygroupyear, Country.Code, Year, FertilityRate) %>% 
+  spread(Country.Code, FertilityRate)
+
+plotdata_byyear
+```
+
+Again, there is a more recent alternative to achieve the same using tidyr's `pivot_wider()`:
+
+```{r}
+plotdata_bygroupyear %>%
+  select(Country.Code, Year, FertilityRate) %>%
+  pivot_wider(names_from = Country.Code, values_from = FertilityRate)
+```
+
+
+## Question 12
+
+True or False? The select statement in the code for question 11 is redundant since we already selected the variables we wanted in generating `plotdata_byyear`.
+
+### Answer
+
+The `select()` function was necessary to exclude `Country.Name`, which is basically the same with `Country.Code`. If we had skipped the selection step, we will basically have the same structure with the original data (`plotdata_bygroupyear`) with new columns from the variable `Country.Code` and with lots of missing values, which is not nice to look at. Here is an example:
+
+```{r}
+plotdata_bygroupyear %>% 
+  spread(Country.Code, FertilityRate)
+```
+
+So the answer to this question is false.
+
+## Question 13
+
+Good news. We are finally ready to plot the data! Let’s begin by plotting the fertility rate over time, separately for each income level. To do this, we can use the basic `ggplot` syntax Prof. Duflo explained in lecture.
+
+Let’s start by trying to generate this plot using the `plotdata_bygroupyear` tibble we generated earlier. Here is the code to generate this plot. Select the set of arguments that belong in the blanks to generate the desired plot.
+
+(The incomplete code is not shown here.)
+
+### Answer
+
+```{r}
+ggplot(plotdata_bygroupyear, aes(x = Year, y = FertilityRate, group = Country.Code)) +
+  geom_line()
+```
+
+
+## Question 14
+
+It would be nicer if the different plot lines had different colors. You can add the argument `color=Country.Code` to the code you generated in question 13. Where do you need to specify this argument? Select one of the Roman numeral blanks in the code below, to replace with, `color=Country.Code` or `color=Country.Code` in order for each of the lines to have a different color.
+
+Note that the unnumbered blanks are from Question 13.
+
+(The incomplete code and the choices are not shown here.)
+
+### Answer
+
+The color argument must be specified inside aesthetics. So we have
+
+```{r}
+ggplot(plotdata_bygroupyear, aes(x = Year, y = FertilityRate, group = Country.Code, color = Country.Code)) +
+  geom_line()
+```
+
+## Question 15
+
+It is good practice to include titles in your plot. To do this, look up the ggplot `labs()`. Select one of the Roman numeral blanks in the code below to replace with (possibly preceded by `,` or `+`) `labs(title='Fertility Rate by Country-Income-Level over Time')`.
+
+Note that the unnumbered blanks are from Question 13.
+
+(The incomplete code and the choices are not shown here.)
+
+### Answer
+
+Plot labels are added independently with a `+`. (See the "Data Visualization with ggplot2" cheat sheet). So our code becomes:
+
+```{r}
+ggplot(plotdata_bygroupyear, aes(x = Year, y = FertilityRate, group = Country.Code)) +
+  geom_line() +
+  labs(title = "Fertility Rate by Country-Income Level over Time")
+```
+
+## Question 16
+
+One more thing we could improve in this plot is the x-axis labels. First, we can remove the leading "X". Second, by storing them as numeric, `ggplot` can use its "optimal" scaling to make a prettier plot instead of having a label for each year. To do this, we can transform the Year variable using `dplyr`’s mutate function and a combination of the functions `as.numeric()` and the `stringr` package. Try to figure out a few ways to do this.
+
+Which of the following statements are equivalent and can be used in the blank below, to complete it? Select all that apply.
+
+(The incomplete code is not shown here.)
+
+### Answer
+All three options are possible ways to strip the X's from the year column. Let's show this.
+
+`str_sub()` subsets a character vector based on an index position specified. (see the help manual). It subsets starting from the last character when given a negative argument. So `str_sub(Year, -4)` extracts the last 4 characters for each element of `Year`, which automatically removes the X's.
+
+```{r}
+plotdata_bygroupyear %>% 
+  mutate(year = str_sub(Year, -4))
+```
+
+`str_sub(Year, 2, 5)` also achieves the same. Here, 2 is the starting and 5 is the ending index to subset. So this extracts the second, third, fourth and fifth characters, which means the X's will be dropped.
+
+```{r}
+plotdata_bygroupyear %>% 
+  mutate(year = str_sub(Year, 2, 5))
+```
+
+`str_replace(Year, "X", "")`, on the other hand, replaces an "X" with an empty character (`""`) when it detects one.
+
+```{r}
+plotdata_bygroupyear %>% 
+  mutate(year = str_replace(Year, "X", ""))
+```
+
+But notice that in all three cases, a new *character* column is created. So we use the `as.numeric()` function to convert it to numeric. 
+
+```{r}
+plotdata_bygroupyear <- mutate(plotdata_bygroupyear, Year = as.numeric(str_replace(Year, "X", "")))
+
+plotdata_bygroupyear
+```
+
+Let's see if our plot has improved.
+
+```{r}
+ggplot(plotdata_bygroupyear, aes(x = Year, y = FertilityRate, color = Country.Code)) +
+  geom_line() +
+  labs(title = "Fertility Rate by Country-Income Level over Time")
+```
+
+That's better!
+
+
+
+
+
+
+
+
+
+
+
 
 
 
