@@ -67,9 +67,10 @@ R has two other built-in functions related to the binomial random
 variable. One is `dbinom()`, and the other is `pbinom()`. Look up these
 functions, and use them to answer the questions below.
 
-For parts A through C, suppose you flip an unfair coin, where $
-p(heads)=0.65 $. **Round your answer to two decimal places. For
-instance, if your answer is 0.467, please input 0.47**.
+For parts A through C, suppose you flip an unfair coin, where
+![p(heads)=0.65](https://latex.codecogs.com/png.latex?p%28heads%29%3D0.65 "p(heads)=0.65").
+**Round your answer to two decimal places. For instance, if your answer
+is 0.467, please input 0.47**.
 
 A. What is the probability of getting exactly 7 heads on 10 flips?
 
@@ -91,7 +92,7 @@ round(pbinom(q = 7, size = 10, prob = 0.65), 2)
 
     ## [1] 0.74
 
-C.What is the probability of getting at least 6 heads on 10 flips?
+C. What is the probability of getting at least 6 heads on 10 flips?
 
 **Answer:**
 
