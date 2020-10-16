@@ -287,3 +287,258 @@ Which of the following is the correct code for getting rid of the object
 
 Use `rm()` to remove objects from the global environment. So
 `rm(gender_data)` achieves the desired result.
+
+Part 1: Questions 5-8
+---------------------
+
+Now that you have loaded the data we want to analyze and have
+familiarized yourself with the structure, it is time to get our hands
+dirty!
+
+A second exploratory thing to do once we have organized a data set is to
+get basic summary statistics of the data. Now let’s do this! To print
+summary statistics directly in your console, you can use any of the
+basic summary functions in R (`mean()`, `sd()`, `min()`, `max()`,
+`sum()` …). The basic summary functions take vectors as an input, and
+output a single value.
+
+For example, if you were interested in obtaining the sample mean of the
+Adolescent Fertility Rate in 1975, one way of doing this is as follows:
+
+    mean(teenager_fr$X1975, na.rm = TRUE)
+
+Question 5
+----------
+
+Why it is necessary to add the option `na.rm = TRUE` to the above
+command? (Select all that apply)
+
+(Choice are not shown here.)
+
+### Answer
+
+The `na.rm` argument removes missing (`NA`) values while applying the
+function to compute summary statistics. In R, the default value for this
+argument is `FALSE` which means R does not remove missing values when
+applying the function. This was done for safety reasons because missing
+values are important and it’s a bad idea to silently ignore missing
+values by default (See Wickham and Grolemund (2017)). The downside is
+that if there is even a single missing value in our data, the function
+returns `NA`, because any computation with missing values produces a
+missing value.
+
+------------------------------------------------------------------------
+
+To calculate summary statistics for a group of variables, there are a
+few different commands. The command `mean()` is just one example of the
+different options available. Now, we ask you to go through the R
+documentation and explore some of the other commands by yourself.
+
+If you want to store the output as values in your dataset, or if you
+want to do something more complicated (ex. Generate these by group, or
+use one of the dplyr summary functions (ex. `n_distinct()`), you can use
+any of the basic summary functions as well as others, in combination
+with `mutate()` and `summarise()` to generate variables in your dataset
+containing summary values.
+
+Now that you’ve learned how to look at and generate summary statistics,
+answer the following questions.
+
+------------------------------------------------------------------------
+
+Question 6
+----------
+
+What is the sample mean and standard deviation of the adolescent
+fertility rate in 1960?
+
+*Please round your answers to the second hundredth decimal place,
+i.e. if your answer is 2.356, round it to 2.36.*
+
+### Answer
+
+``` r
+mean_fr_1960 <- mean(teenager_fr$X1960, na.rm = TRUE) %>% round(2)
+cat("Sample mean of FR in 1960: ", mean_fr_1960)
+```
+
+    ## Sample mean of FR in 1960:  101.33
+
+``` r
+sd_fr_1960 <- sd(teenager_fr$X1960, na.rm = TRUE) %>% round(2)
+cat("Standard deviation of FR in 1960: ", sd_fr_1960)
+```
+
+    ## Standard deviation of FR in 1960:  54.21
+
+Question 7
+----------
+
+What is the sample mean and standard deviation of the adolescent
+fertility rate in 2000?
+
+*Please round your answers to the second hundredth decimal place,
+i.e. if you answer is 2.356 round it 2.36.*
+
+### Answer
+
+``` r
+mean_fr_2000 <- mean(teenager_fr$X2000, na.rm = TRUE) %>% round(2)
+cat("Sample mean of FR in 2000: ", mean_fr_2000)
+```
+
+    ## Sample mean of FR in 2000:  63.15
+
+``` r
+sd_fr_2000 <- sd(teenager_fr$X2000, na.rm = TRUE) %>% round(2)
+cat("Standard deviation of FR in 2000: ", sd_fr_2000)
+```
+
+    ## Standard deviation of FR in 2000:  46.92
+
+Question 8
+----------
+
+True or False? Based on the results from Questions 6 and 7, we can
+conclude that the Adolescent Fertility Rate has had a permanent
+decreasing (i.e. only decreases and never increases during this period)
+trend from 1960-2000, and that the dispersion of this variable has
+decreased over time.
+
+### Answer
+
+Based on the observations at the two points in time (1960 and 2000)
+alone, we cannot conclude that there was a decreasing or an increasing
+trend. So the answer is false.
+
+------------------------------------------------------------------------
+
+Now, we are interested in plotting the evolution of the Adolescent
+Fertility Rate from 1960 to 2015. In addition, we are interested in
+having different information in the same plot. First, we want to plot
+the sample mean of all the data set, but also we want to add more
+information such as the rate for low, middle and high income countries
+(an indicator for country code is stored in the variable
+“`Country.Code`”).
+
+Inspect this variable to get a sense of what it contains. Note that it
+includes indicators for both countries, regions, and income group. Since
+we are only interested in the trends by income group, we want to filter
+the data to contain only the fertility rate for high, middle, and low
+income countries as well as the world average.
+
+------------------------------------------------------------------------
+
+Question 9
+----------
+
+Use the dplyr `filter()` command and the logical `%in%` to keep only the
+relevant `Country.Code` observations in `teenager_fr.` Make sure you
+name the new dataset “`byincomelevel`”. Choose the line of code below:
+
+(Choices are not shown here.)
+
+### Answer
+
+(Based on the choices provided.)
+
+``` r
+byincomelevel <- filter(teenager_fr, Country.Code %in% c("LIC", "MIC", "HIC", "WLD") )
+
+byincomelevel
+```
+
+    ## # A tibble: 4 x 64
+    ##      X1 Country.Name Country.Code Indicator.Name Indicator.Code X1960 X1961
+    ##   <dbl> <chr>        <chr>        <chr>          <chr>          <dbl> <dbl>
+    ## 1   379 High income  HIC          Adolescent fe~ SP.ADO.TFRT     45.5  45.3
+    ## 2   703 Low income   LIC          Adolescent fe~ SP.ADO.TFRT    137.  137. 
+    ## 3   838 Middle inco~ MIC          Adolescent fe~ SP.ADO.TFRT     95.0  95.1
+    ## 4  1216 World        WLD          Adolescent fe~ SP.ADO.TFRT     86.2  86.0
+    ## # ... with 57 more variables: X1962 <dbl>, X1963 <dbl>, X1964 <dbl>,
+    ## #   X1965 <dbl>, X1966 <dbl>, X1967 <dbl>, X1968 <dbl>, X1969 <dbl>,
+    ## #   X1970 <dbl>, X1971 <dbl>, X1972 <dbl>, X1973 <dbl>, X1974 <dbl>,
+    ## #   X1975 <dbl>, X1976 <dbl>, X1977 <dbl>, X1978 <dbl>, X1979 <dbl>,
+    ## #   X1980 <dbl>, X1981 <dbl>, X1982 <dbl>, X1983 <dbl>, X1984 <dbl>,
+    ## #   X1985 <dbl>, X1986 <dbl>, X1987 <dbl>, X1988 <dbl>, X1989 <dbl>,
+    ## #   X1990 <dbl>, X1991 <dbl>, X1992 <dbl>, X1993 <dbl>, X1994 <dbl>,
+    ## #   X1995 <dbl>, X1996 <dbl>, X1997 <dbl>, X1998 <dbl>, X1999 <dbl>,
+    ## #   X2000 <dbl>, X2001 <dbl>, X2002 <dbl>, X2003 <dbl>, X2004 <dbl>,
+    ## #   X2005 <dbl>, X2006 <dbl>, X2007 <dbl>, X2008 <dbl>, X2009 <dbl>,
+    ## #   X2010 <dbl>, X2011 <dbl>, X2012 <dbl>, X2013 <dbl>, X2014 <dbl>,
+    ## #   X2015 <dbl>, X2016 <dbl>, X2017 <dbl>, X <lgl>
+
+------------------------------------------------------------------------
+
+Notice, there are still two problems with the resulting data:
+
+1.  It contains additional variables that we don’t need or are
+    meaningless at this level of aggregation.
+
+2.  It is not organized in a very intuitive way. A more natural way to
+    organize this data, and prepare it for plotting, is to have each
+    observation represent either a year or a country group-year, and
+    each of the columns represent either the fertility rate for a given
+    group, or if the data is at the country-group year level, then just
+    the fertility rate.
+
+------------------------------------------------------------------------
+
+Question 10
+-----------
+
+Suppose you decide you prefer to have one observation per income group
+and year. The tidyr command `gather()` can help you achieve this. Look
+up the command in the help files. Select the set of arguments that
+belong in the blanks below.
+
+### Answer
+
+(Based on the code given in the question.)
+
+``` r
+plotdata_bygroupyear <- gather(byincomelevel, Year, FertilityRate, X1960:X2015) %>%
+  select(Year, Country.Name, Country.Code, FertilityRate)
+
+plotdata_bygroupyear
+```
+
+    ## # A tibble: 224 x 4
+    ##    Year  Country.Name  Country.Code FertilityRate
+    ##    <chr> <chr>         <chr>                <dbl>
+    ##  1 X1960 High income   HIC                   45.5
+    ##  2 X1960 Low income    LIC                  137. 
+    ##  3 X1960 Middle income MIC                   95.0
+    ##  4 X1960 World         WLD                   86.2
+    ##  5 X1961 High income   HIC                   45.3
+    ##  6 X1961 Low income    LIC                  137. 
+    ##  7 X1961 Middle income MIC                   95.1
+    ##  8 X1961 World         WLD                   86.0
+    ##  9 X1962 High income   HIC                   45.1
+    ## 10 X1962 Low income    LIC                  138. 
+    ## # ... with 214 more rows
+
+An alternative and more recent approach to do this is using the tidyr
+`pivot_longer()` function.
+
+``` r
+byincomelevel %>% 
+  pivot_longer(X1960:X2015, names_to = "Year", values_to = "FertilityRate") %>%
+  select(Year, Country.Name, Country.Code, FertilityRate) %>% 
+  arrange(Year)
+```
+
+    ## # A tibble: 224 x 4
+    ##    Year  Country.Name  Country.Code FertilityRate
+    ##    <chr> <chr>         <chr>                <dbl>
+    ##  1 X1960 High income   HIC                   45.5
+    ##  2 X1960 Low income    LIC                  137. 
+    ##  3 X1960 Middle income MIC                   95.0
+    ##  4 X1960 World         WLD                   86.2
+    ##  5 X1961 High income   HIC                   45.3
+    ##  6 X1961 Low income    LIC                  137. 
+    ##  7 X1961 Middle income MIC                   95.1
+    ##  8 X1961 World         WLD                   86.0
+    ##  9 X1962 High income   HIC                   45.1
+    ## 10 X1962 Low income    LIC                  138. 
+    ## # ... with 214 more rows
