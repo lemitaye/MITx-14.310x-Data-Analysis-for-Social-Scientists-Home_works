@@ -313,7 +313,7 @@ Question 5
 Why it is necessary to add the option `na.rm = TRUE` to the above
 command? (Select all that apply)
 
-(Choice are not shown here.)
+(Choices are not shown here.)
 
 ### Answer
 
@@ -443,7 +443,7 @@ name the new dataset “`byincomelevel`”. Choose the line of code below:
 (Based on the choices provided.)
 
 ``` r
-byincomelevel <- filter(teenager_fr, Country.Code %in% c("LIC", "MIC", "HIC", "WLD") )
+byincomelevel <- filter(teenager_fr, Country.Code %in% c("LIC", "MIC", "HIC", "WLD"))
 
 byincomelevel
 ```
@@ -522,9 +522,9 @@ An alternative and more recent approach to do this is using the tidyr
 `pivot_longer()` function.
 
 ``` r
-byincomelevel %>% 
+byincomelevel %>%
   pivot_longer(X1960:X2015, names_to = "Year", values_to = "FertilityRate") %>%
-  select(Year, Country.Name, Country.Code, FertilityRate) %>% 
+  select(Year, Country.Name, Country.Code, FertilityRate) %>%
   arrange(Year)
 ```
 
@@ -557,7 +557,7 @@ files. Select the set of arguments that belong in the blanks below:
 ### Answer
 
 ``` r
-plotdata_byyear <- select(plotdata_bygroupyear, Country.Code, Year, FertilityRate) %>% 
+plotdata_byyear <- select(plotdata_bygroupyear, Country.Code, Year, FertilityRate) %>%
   spread(Country.Code, FertilityRate)
 
 plotdata_byyear
@@ -619,7 +619,7 @@ variable `Country.Code` and with lots of missing values, which is not
 nice to look at. Here is an example:
 
 ``` r
-plotdata_bygroupyear %>% 
+plotdata_bygroupyear %>%
   spread(Country.Code, FertilityRate)
 ```
 
@@ -742,7 +742,7 @@ extracts the last 4 characters for each element of `Year`, which
 automatically removes the X’s.
 
 ``` r
-plotdata_bygroupyear %>% 
+plotdata_bygroupyear %>%
   mutate(year = str_sub(Year, -4))
 ```
 
@@ -766,7 +766,7 @@ and 5 is the ending index to subset. So this extracts the second, third,
 fourth and fifth characters, which means the X’s will be dropped.
 
 ``` r
-plotdata_bygroupyear %>% 
+plotdata_bygroupyear %>%
   mutate(year = str_sub(Year, 2, 5))
 ```
 
@@ -789,7 +789,7 @@ plotdata_bygroupyear %>%
 empty character (`""`) when it detects one.
 
 ``` r
-plotdata_bygroupyear %>% 
+plotdata_bygroupyear %>%
   mutate(year = str_replace(Year, "X", ""))
 ```
 
@@ -843,3 +843,121 @@ ggplot(plotdata_bygroupyear, aes(x = Year, y = FertilityRate, color = Country.Co
 ![](Module_3_files/figure-gfm/unnamed-chunk-24-1.png)<!-- -->
 
 That’s better!
+
+Part 1: Question 18 - 23
+------------------------
+
+Now, we are not going to consider the trends of the different categories
+over the years. Instead, we are going to compare how the distribution of
+the Adolescent Fertility Rate is different between 1960 and 2000.
+
+We have provided the R script here to help you answer the next set of
+questions.
+
+First, we want to generate `histdata_twoyears.`
+
+    histdata_twoyears <- select(teenager_fr, Country.Name, Country.Code, Indicator.Name, Indicator.Code, X1960, X2000)
+
+    histdata_twoyears <- gather(teenager_fr, Year, FertilityRate, X1960, X2000) %>%
+      select(Year, Country.Name, Country.Code, FertilityRate)
+
+    histdata_twoyears <- filter(histdata_twoyears, !is.na(FertilityRate))
+
+We want to plot a histogram of the two variables. The following code in
+R plots the histogram of these two variables in the same graph. Please
+take a look at the code and try to understand what it is doing.
+
+    ggplot(histdata_twoyears, aes(x=FertilityRate)) + 
+      geom_histogram(data=subset(histdata_twoyears, Year=="X1960"), 
+                     color="darkred", fill="red", alpha=0.2) + 
+      geom_histogram(data=subset(histdata_twoyears, Year=="X2000"), 
+                     color="darkblue", fill="blue", alpha=0.2) 
+    ggsave("hist.png")
+
+Here is the figure that this code has produced:
+
+![](Module_3_files/figure-gfm/unnamed-chunk-25-1.png)<!-- -->
+
+Question 18
+-----------
+
+What does the argument `alpha` dictate?
+
+(Choices are not shown here.)
+
+### Answer
+
+The argument `alpha` controls the transparency of the fillings of each
+bin (try different values of `alpha`). It is important to specify it
+here to make our plot visible since we are stacking two histograms on
+the same axes.
+
+Question 19
+-----------
+
+As you can see, we have certain number of bins in the figure. Go to the
+R documentation and look for the option in the command
+`geom_histogram()` that will allow you to change the number of bins in
+the figure. Select all that apply.
+
+(Choice are not shown here.)
+
+### Answer
+
+The following arguments could be specified to control the number of
+bins.
+
+-   `bins`: we could directly specify the number of bins we want. The
+    default value is 30. For example the histograms below were produced
+    with different bin numbers for the `iris` data set. The histogram on
+    the left has 10 bins and the histogram on the right has 20 bins.
+
+``` r
+ggplot(iris) +
+  geom_histogram(aes(x = Sepal.Length), bins = 10) +
+  labs(title = "Number of bins = 10")
+
+ggplot(iris) +
+  geom_histogram(aes(x = Sepal.Length), bins = 20) +
+  labs(title = "Number of bins = 20")
+```
+
+<img src="Module_3_files/figure-gfm/unnamed-chunk-26-1.png" width="50%" /><img src="Module_3_files/figure-gfm/unnamed-chunk-26-2.png" width="50%" />
+
+-   `binwidth`: we can set the width of the intervals in a histogram
+    with this argument, which is measured in the units of the `x`
+    variable. Below are two histograms for the same data set with
+    different binwidths. As you can observe, the smaller the binwidth,
+    the larger the number of bins.
+
+``` r
+ggplot(iris) +
+  geom_histogram(aes(x = Sepal.Length), binwidth = 0.25) +
+  labs(title = "binwidth = 0.25")
+
+ggplot(iris) +
+  geom_histogram(aes(x = Sepal.Length), binwidth = 0.5) +
+  labs(title = "binwidth = 0.5")
+```
+
+<img src="Module_3_files/figure-gfm/unnamed-chunk-27-1.png" width="50%" /><img src="Module_3_files/figure-gfm/unnamed-chunk-27-2.png" width="50%" />
+
+-   `breaks`: we could also specify the bin boundaries with a numeric
+    vector. This overrides `bins` and `binwidth`.
+
+Here are two histograms for the same variable from the `iris` data.
+Notice that the narrower the gap between the breaks, the more bins we
+have. But the break points need not have equal distance between them as
+done here.
+
+``` r
+ggplot(iris) +
+  geom_histogram(aes(x = Sepal.Length), breaks = c(4, 5, 6, 7, 8)) +
+  labs(title = "breaks = 4, 5, 6, 7, 8")
+
+ggplot(iris) +
+  geom_histogram(aes(x = Sepal.Length), breaks = c(4, 4.4, 4.8, 5.2, 5.6, 6, 6.4, 6.8, 7.2, 7.4, 7.8, 8.2)) +
+  labs(title = "breaks = 4, 4.4, 4.8, 5.2, 5.6, 6, 6.4, 6.8, 7.2, 7.4, 7.8, 8.2")
+```
+
+<img src="Module_3_files/figure-gfm/unnamed-chunk-28-1.png" width="50%" /><img src="Module_3_files/figure-gfm/unnamed-chunk-28-2.png" width="50%" />
