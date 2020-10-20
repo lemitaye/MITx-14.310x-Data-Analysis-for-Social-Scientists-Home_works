@@ -1,0 +1,105 @@
+---
+title: "Module 5: Home Work"
+author: "Lemi Daba"
+date: "10/18/2020"
+output: 
+  github_document:    
+    pandoc_args: --webtex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Question 1
+
+A manufacturer receives a shipment of 100 parts from a vendor. The shipment will be unacceptable if more than five of the parts are defective. The manufacturer is going to randomly select $ K $ parts from the shipment for inspection, and the shipment will be accepted if no defective parts are found in the sample.
+
+How large does $ K $ have to be to ensure that the probability that the manufacturer accepts an unacceptable shipment is less than 0.1?
+
+*Hint: We recommend using R to plug in different values of  $ K $.*
+
+### Answer
+
+Let $ X $ be the number of defectives out of a sample of $ K $ parts. Then $ X $ follows the hypergeometric distribution, since this is a problem of sampling without replacement. 
+
+<!-- We are looking for the smallest value of $ K $ such that the probability of finding no defects out of the $ K $ chosen is small (less than 0.1). Well, if we assume there are many defective parts in the whole (the 100 parts), then it is more likely that there will be at least one defective part in our sample. Thus, in order to minimize $ K $, we need to assume the least number of defectives in the whole such that the shipment is still unacceptable. So we assume there are 6 defectives. Then the probability of finding no defective parts out of the $ K $ parts is given by: -->
+
+It helps to think about this problem from the perspective of the manufacturer (the one who does the inspection). So suppose you are the manufacturer. Your goal is to minimize the probability of accepting an unacceptable shipment. A shipment is unacceptable if there are more than five defective parts; so we need 6 or more parts to be defective for the problem to be relevant. Now think of the different scenarios in terms of the true number of defective parts in the whole shipment under which it is more likely that you make an error (i.e., accept a faulty shipment.) The worst case scenario is when there are 6 defective and 94 non-defective parts. In this case you are less likely to find defective parts in your sample, while the shipment is still unacceptable, and hence, more likely to make an error. So to find the smallest $ K $ that covers all cases, we'll assume there are 6 defective parts. Then the probability of finding no defective parts out of the $ K $ parts sampled is given as:
+
+<!-- $$P(X = 0) = \frac{ \binom{6}{0} \binom{94}{K} }{ \binom{100}{K} }$$ -->
+
+As $ K $ increases (as we sample more parts for inspection) the probability of finding at least one defect (i.e, the probability that at least one of the 6 defective parts will be in our sample) increases, and hence, the probability of finding no defective parts (and wrongly conclude that the shipment is acceptable) decreases. So we are looking for the smallest $ K $ such that this probability is just below 0.1. We use the R command `dhyper()` (look-up the documentation) to calculate the probabilities of finding no defective parts for different values of $ K $.  
+
+```{r}
+K <- 10:50  # We will consider the range 10-50 parts
+prob <- dhyper(x = 0, m = 6, n = 94, k = K)  # calculate the probability of zero defects for each number in K
+valid <- (prob < 0.1) # create a logical vector based on the given condition
+
+A <- as.data.frame( cbind(K, prob, valid) ) # create a data-frame by binding the vectors K, prob, and valid
+A
+``` 
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+
+A %>%
+  filter(valid == 1) %>%
+  filter(row_number() == 1)
+```
+
+
+So the smallest value of $ K $ for which the probability of finding no defect is below 0.1 is 32. We can also see this graphically.
+
+```{r}
+theme_set(theme_light())
+
+ggplot(A, aes(K, prob, color = as_factor(valid) ) ) +
+  geom_point() +
+  geom_hline(aes(yintercept = 0.1)) +
+  geom_text( aes(label = ifelse(
+      K == 32,
+      paste0( "(", K, ",", " ", round(prob, 3), ")" ),
+      ""
+  ), hjust=1, vjust=1)) +    
+  labs(
+    x = "K (sample size)",
+    y = "Probability of finding 0 defects"
+  )
+```
+
+## Question 2
+
+Now suppose that the manufacturer decides to accept the shipment if there is at most one defective part in the sample. How large does $ K $ have to be to ensure that the probability that the manufacturer accepts an unacceptable shipment is less than 0.1? As above, a shipment is unacceptable if there are more than 5 defective parts.
+
+### Answer
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
