@@ -197,3 +197,83 @@ B %>%
     ## 1 51 0.09331377     1
 
 Hence, $ K $ has to be at least 51.
+
+Question 4
+----------
+
+Let the number of chocolate chips in a certain type of cookie have a
+Poisson distribution. We want the probability that a randomly chosen
+cookie has at least two chocolate chips to be greater than 0.99. For
+which of the following values of the **mean** of the distribution is
+this condition assured? (Please select all that apply!)
+
+*Hint: You may wish to try different values in R when solving this
+problem if you have trouble solving the relevant equations.*
+
+(Choices are not shown here.)
+
+### Answer
+
+Let $ X $ be the number of chocolate chips. The pdf of $ X $ is given as
+<!-- $$ -->
+<!--   P(X = x) = \frac{e^{-\lambda}\lambda^{x}}{x!}, \qquad x = 0, \:1, \:2,\:3, \:\dots -->
+<!-- $$ --> We want to solve for the values of $ $ such that
+
+<!-- $$ -->
+<!--   P(X \geq 2) > 0.99 -->
+<!-- $$ -->
+
+It is easier to work with the equivalent form:
+
+<!-- $$ -->
+<!--   1 - P(X = 0) - P(X = 1) > 0.99 \\ -->
+<!--   \iff P(X = 0) + P(X = 1) < 0.01 \\ -->
+<!--   \iff e^{-\lambda} + \lambda e^{-\lambda} < 0.01 -->
+<!-- $$ -->
+
+This inequality is difficult to solve analytically. So we resort to R to
+try different values of $ $.
+
+``` r
+lambda <- 1:10  # we'll consider the numbers from 1 to 10
+x <- (1 + lambda)*exp(-lambda) # compute the expression in the inequality above
+valid <- (x < 0.01)  # identify which ones are less than or equal to 1
+
+cbind(lambda, x, valid)
+```
+
+    ##       lambda            x valid
+    ##  [1,]      1 0.7357588823     0
+    ##  [2,]      2 0.4060058497     0
+    ##  [3,]      3 0.1991482735     0
+    ##  [4,]      4 0.0915781944     0
+    ##  [5,]      5 0.0404276820     0
+    ##  [6,]      6 0.0173512652     0
+    ##  [7,]      7 0.0072950557     1
+    ##  [8,]      8 0.0030191637     1
+    ##  [9,]      9 0.0012340980     1
+    ## [10,]     10 0.0004993992     1
+
+It seems values of lambda greater than or equal to 7 work.
+
+An alternative and more direct approach is to use R’s built-in function
+`ppois()`, which computes the cumulative probability for the Poisson
+distribution.
+
+``` r
+prob <- ppois(q = 1, lambda = lambda, lower.tail = FALSE)  # we set lower.tail = FALSE because we want to calculate P(X >= 1)
+valid <- (prob > 0.99)
+cbind(lambda, prob, valid)
+```
+
+    ##       lambda      prob valid
+    ##  [1,]      1 0.2642411     0
+    ##  [2,]      2 0.5939942     0
+    ##  [3,]      3 0.8008517     0
+    ##  [4,]      4 0.9084218     0
+    ##  [5,]      5 0.9595723     0
+    ##  [6,]      6 0.9826487     0
+    ##  [7,]      7 0.9927049     1
+    ##  [8,]      8 0.9969808     1
+    ##  [9,]      9 0.9987659     1
+    ## [10,]     10 0.9995006     1
