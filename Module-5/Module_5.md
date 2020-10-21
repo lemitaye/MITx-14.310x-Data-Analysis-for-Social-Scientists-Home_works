@@ -23,8 +23,6 @@ Let $ X $ be the number of defectives out of a sample of $ K $ parts.
 Then $ X $ follows the hypergeometric distribution, since this is a
 problem of sampling without replacement.
 
-<!-- We are looking for the smallest value of $ K $ such that the probability of finding no defects out of the $ K $ chosen is small (less than 0.1). Well, if we assume there are many defective parts in the whole (the 100 parts), then it is more likely that there will be at least one defective part in our sample. Thus, in order to minimize $ K $, we need to assume the least number of defectives in the whole such that the shipment is still unacceptable. So we assume there are 6 defectives. Then the probability of finding no defective parts out of the $ K $ parts is given by: -->
-
 It helps to think about this problem from the perspective of the
 manufacturer (the one who does the inspection). So suppose you are the
 manufacturer. Your goal is to minimize the probability of accepting an
@@ -59,7 +57,6 @@ prob <- dhyper(x = 0, m = 6, n = 94, k = K)  # calculate the probability of zero
 valid <- (prob < 0.1) # create a logical vector based on the given condition
 
 A <- as.data.frame( cbind(K, prob, valid) ) # create a data-frame by binding the vectors K, prob, and valid
-
 A
 ```
 
@@ -138,3 +135,14 @@ ggplot(A, aes(K, prob, color = as_factor(valid) ) ) +
 ```
 
 ![](Module_5_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+
+Question 2
+----------
+
+Now suppose that the manufacturer decides to accept the shipment if
+there is at most one defective part in the sample. How large does $ K $
+have to be to ensure that the probability that the manufacturer accepts
+an unacceptable shipment is less than 0.1? As above, a shipment is
+unacceptable if there are more than 5 defective parts.
+
+### Answer
