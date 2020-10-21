@@ -146,3 +146,54 @@ an unacceptable shipment is less than 0.1? As above, a shipment is
 unacceptable if there are more than 5 defective parts.
 
 ### Answer
+
+We follow the same approach as above but this time we calculate the
+probability that $ X $ is 0 or 1, i.e., $ P(X = 0) + P(X = 1) $. The
+`phyper()` function in R calculates the cumulative probability for the
+hypergeometric distribution.
+
+``` r
+K <- 10:90  # We consider the range of values from 10 to 90
+prob <- phyper(q = 1, m = 6, n = 94, k = K)  # calculate the probability that X is 0 or 1 for all values of K
+valid <- (prob < 0.1)  # create a logical vector based on the given condition
+
+B <- as.data.frame(cbind(K, prob, valid)) # create a data frame by combining the vectors K, prob, and valid
+```
+
+``` r
+head(B)
+```
+
+    ##    K      prob valid
+    ## 1 10 0.8909905     0
+    ## 2 11 0.8705079     0
+    ## 3 12 0.8489897     0
+    ## 4 13 0.8265824     0
+    ## 5 14 0.8034238     0
+    ## 6 15 0.7796438     0
+
+``` r
+tail(B)
+```
+
+    ##     K         prob valid
+    ## 76 85 2.183293e-04     1
+    ## 77 86 1.469524e-04     1
+    ## 78 87 9.536913e-05     1
+    ## 79 88 5.924236e-05     1
+    ## 80 89 3.488102e-05     1
+    ## 81 90 1.920218e-05     1
+
+Now we find the smallest value of $ K $ for which the desired
+probability is less than 1.
+
+``` r
+B %>% 
+  filter(valid == 1) %>% 
+  filter(row_number() == 1)
+```
+
+    ##    K       prob valid
+    ## 1 51 0.09331377     1
+
+Hence, $ K $ has to be at least 51.

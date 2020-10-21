@@ -72,11 +72,33 @@ Now suppose that the manufacturer decides to accept the shipment if there is at 
 
 ### Answer
 
+We follow the same approach as above but this time we calculate the probability that $ X $ is 0 or 1, i.e., $ P(X = 0) + P(X = 1) $. The `phyper()` function in R calculates the cumulative probability for the hypergeometric distribution.
 
+```{r}
+K <- 10:90  # We consider the range of values from 10 to 90
+prob <- phyper(q = 1, m = 6, n = 94, k = K)  # calculate the probability that X is 0 or 1 for all values of K
+valid <- (prob < 0.1)  # create a logical vector based on the given condition
 
+B <- as.data.frame(cbind(K, prob, valid)) # create a data frame by combining the vectors K, prob, and valid
+```
 
+```{r}
+head(B)
+```
 
+```{r}
+tail(B)
+```
 
+Now we find the smallest value of $ K $ for which the desired probability is less than 1.
+
+```{r}
+B %>% 
+  filter(valid == 1) %>% 
+  filter(row_number() == 1)
+```
+
+Hence, $ K $ has to be at least 51.
 
 
 
