@@ -277,3 +277,35 @@ cbind(lambda, prob, valid)
     ##  [8,]      8 0.9969808     1
     ##  [9,]      9 0.9987659     1
     ## [10,]     10 0.9995006     1
+
+Questions 8 - 13
+----------------
+
+Now we are going to perform some simulations in R. We are going to
+follow Sara’s example in the lecture where we imagine a case where the $
+x\_{i} $ follow a uniform distribution between $ 0 $ and $ $ ($ U\[0, \]
+$), and two researchers are trying to figure out the value of $ $. (We
+will set $ = 5 $). We are going to simulate different random samples
+from this distribution with a sample size of 100 observations each.
+These samples will be available to the two researchers, and we are going
+to plot how $ $ is distributed for different estimators.
+
+There are two types of researchers in this world. Researcher $ A $ uses
+as an estimator for $ $, $ \_{A} = 2\*{x} $, where $ {x} $ corresponds
+to the sample mean of the sample he receives from us. Researcher B uses
+as an estimator $ \_{B} = 2\*(x) $, where $ (x) $ corresponds to the
+mediam of the sample he receives from us.
+
+We have provided you with [this R
+code](https://courses.edx.org/assets/courseware/v1/2b2a8b611f71a9e6b6cd64f7ab3e4149/asset-v1:MITx+14.310x+3T2020+type@asset+block/RcodePset6Students.R)
+that has some information missing in case you need help for this
+exercise.
+
+------------------------------------------------------------------------
+
+If you haven’t already, please fill in the R code provided earlier.
+
+We have run our simulations, simulating 100,000 different samples of
+size 100. We have provided 200,000 researchers (A and B), each with one
+of these samples. They have sent us their estimators for . The following
+plot shows a histogram of their estimators (Figure 1).
