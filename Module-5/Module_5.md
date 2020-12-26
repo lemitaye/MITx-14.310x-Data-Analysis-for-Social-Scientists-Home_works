@@ -442,7 +442,8 @@ legend("topright", c("n = 100", "n = 1000"),
 
 ![](Module_5_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
 
-It appears the blue histogram is for $ n = 1000
-![. This can also be inferred from the variances of the two estimators. The one with the larger sample size (](https://latex.codecogs.com/png.latex?.%20This%20can%20also%20be%20inferred%20from%20the%20variances%20of%20the%20two%20estimators.%20The%20one%20with%20the%20larger%20sample%20size%20%28 ". This can also be inferred from the variances of the two estimators. The one with the larger sample size (")
-n = 1000 $) will have a lower variance (hence a tight distribution),
-since variance decreases as the sample size increases.
+It appears the blue histogram is for $ n = 1000 $ . This can also be
+inferred from the variances of the two estimators. The one with the
+larger sample size ( $ n = 1000 $ ) will have a lower variance (hence, a
+tight distribution), since variance decreases as the sample size
+increases.
