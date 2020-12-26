@@ -415,3 +415,34 @@ Question 13
 Does the blue histogram correspond to a sample size of 100 or of 1000?
 
 ### Answer
+
+We can code this and see the result.
+
+``` r
+real_theta <- 5
+sample_size1 <- 100
+sample_size2 <- 1000
+number_simulations <- 100000
+
+simulations1 <- matrix(runif(sample_size1*number_simulations, max = real_theta), nrow = number_simulations)
+
+simulations2 <- matrix(runif(sample_size2*number_simulations, max = real_theta), nrow = number_simulations)
+
+estimator_n_100 <- 2*apply(simulations1, 1, mean)
+estimator_n_1000 <- 2*apply(simulations2, 1, mean)   
+
+# Plot
+hist(estimator_n_1000, breaks = 100, freq=FALSE, col = rgb(0,0,1,1/4), 
+     xlim = range(estimator_n_100), xlab = "Values", main = "" ) 
+hist(estimator_n_100, breaks = 100, freq=FALSE, col = rgb(1,0,0,1/4),  
+     add = TRUE ) 
+legend("topright", c("n = 100", "n = 1000"), 
+       fill = c(rgb(1,0,0,1/4), rgb(0,0,1,1/4)) )
+```
+
+![](Module_5_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+
+It appears the blue histogram is for $ n = 1000
+![. This can also be inferred from the variances of the two estimators. The one with the larger sample size (](https://latex.codecogs.com/png.latex?.%20This%20can%20also%20be%20inferred%20from%20the%20variances%20of%20the%20two%20estimators.%20The%20one%20with%20the%20larger%20sample%20size%20%28 ". This can also be inferred from the variances of the two estimators. The one with the larger sample size (")
+n = 1000 $) will have a lower variance (hence a tight distribution),
+since variance decreases as the sample size increases.
